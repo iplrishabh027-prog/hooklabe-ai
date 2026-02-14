@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HookLabe AI - Premium Creator Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-cyan: #00E5FF;
+            --brand-purple: #E040FB;
+            --brand-dark: #000000;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .font-outfit {
+            font-family: 'Outfit', sans-serif;
+        }
+        .dark {
+            color-scheme: dark;
+        }
+        
+        .bg-brand-light-tint {
+            background-color: #F8FAFC;
+        }
+
+        .dark .bg-brand-light-tint {
+            background-color: #000000;
+        }
+
+        /* Custom range track styling for that specific cyan thumb */
+        input[type='range'] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type='range']::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #000000;
+            border-radius: 2px;
+        }
+        .dark input[type='range']::-webkit-slider-runnable-track {
+            background: #FFFFFF;
+        }
+        input[type='range']::-webkit-slider-thumb {
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #00E5FF;
+            cursor: pointer;
+            -webkit-appearance: none;
+            margin-top: -6px;
+            box-shadow: 0 0 0 4px rgba(0, 229, 255, 0.1);
+        }
+
+        /* Shimmer Effect for Loading States */
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+        .animate-shimmer {
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0) 100%);
+            background-size: 1000px 100%;
+            animation: shimmer 2s infinite linear;
+        }
+        .dark .animate-shimmer {
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.03) 50%, rgba(255,255,255,0) 100%);
+            background-size: 1000px 100%;
+        }
+
+        /* Scanline for Engineering Button */
+        @keyframes scanline {
+            0% { top: -100%; }
+            100% { top: 100%; }
+        }
+        .scanline {
+            position: absolute;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(to bottom, transparent, rgba(0, 229, 255, 0.1), transparent);
+            animation: scanline 3s infinite linear;
+            pointer-events: none;
+        }
+
+        /* Morphing Blob Animation */
+        @keyframes morph {
+          0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+          50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+          100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+        }
+        .animate-morph {
+          animation: morph 8s ease-in-out infinite;
+        }
+
+        /* Pulse glow for AI active state */
+        @keyframes pulse-glow {
+          0% { transform: scale(0.95); opacity: 0.5; }
+          50% { transform: scale(1.05); opacity: 0.8; }
+          100% { transform: scale(0.95); opacity: 0.5; }
+        }
+        .animate-pulse-glow {
+          animation: pulse-glow 3s ease-in-out infinite;
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "react": "https://esm.sh/react@^19.2.4",
+    "@google/genai": "https://esm.sh/@google/genai@^1.41.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="bg-brand-light-tint text-slate-900 selection:bg-[#00E5FF]/20">
+    <div id="root"></div>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>
