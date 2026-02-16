@@ -1,0 +1,128 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HookLabe AI - Premium Creator Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-cyan: #00E5FF;
+            --brand-purple: #E040FB;
+            --brand-dark: #000000;
+            --menu-ease: cubic-bezier(0.4, 0, 0.2, 1);
+            --menu-duration: 300ms;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .font-outfit {
+            font-family: 'Outfit', sans-serif;
+        }
+        .dark {
+            color-scheme: dark;
+        }
+        
+        /* Smooth Menu Animations */
+        .menu-overlay {
+            transition: opacity var(--menu-duration) var(--menu-ease), 
+                        visibility var(--menu-duration) var(--menu-ease),
+                        backdrop-filter var(--menu-duration) var(--menu-ease);
+        }
+        
+        .side-menu {
+            transition: transform var(--menu-duration) var(--menu-ease);
+            transform: translateX(-100%);
+        }
+        
+        .side-menu.open {
+            transform: translateX(0);
+        }
+
+        /* Staggered Slide-down + Fade-in for menu items */
+        .menu-item {
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 400ms var(--menu-ease), 
+                        transform 400ms var(--menu-ease);
+        }
+
+        .side-menu.open .menu-item {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Staggered delays for the premium feel */
+        .side-menu.open .menu-item:nth-child(1) { transition-delay: 100ms; }
+        .side-menu.open .menu-item:nth-child(2) { transition-delay: 150ms; }
+        .side-menu.open .menu-item:nth-child(3) { transition-delay: 200ms; }
+        .side-menu.open .menu-item:nth-child(4) { transition-delay: 250ms; }
+        .side-menu.open .menu-item:nth-child(5) { transition-delay: 300ms; }
+
+        .bg-brand-light-tint {
+            background-color: #F8FAFC;
+        }
+
+        .dark .bg-brand-light-tint {
+            background-color: #000000;
+        }
+
+        input[type='range'] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type='range']::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #000000;
+            border-radius: 2px;
+        }
+        .dark input[type='range']::-webkit-slider-runnable-track {
+            background: #FFFFFF;
+        }
+        input[type='range']::-webkit-slider-thumb {
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #00E5FF;
+            cursor: pointer;
+            -webkit-appearance: none;
+            margin-top: -6px;
+            box-shadow: 0 0 0 4px rgba(0, 229, 255, 0.1);
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+        .animate-shimmer {
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0) 100%);
+            background-size: 1000px 100%;
+            animation: shimmer 2s infinite linear;
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "react": "https://esm.sh/react@^19.2.4",
+    "@google/genai": "https://esm.sh/@google/genai@^1.41.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2.39.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="bg-brand-light-tint text-slate-900 selection:bg-[#00E5FF]/20">
+    <div id="root"></div>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>
