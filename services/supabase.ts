@@ -1,8 +1,8 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 // Access environment variables directly for static replacement compatibility
-const envUrl = process.env.SUPABASE_URL;
-const envKey = process.env.SUPABASE_ANON_KEY;
+const envUrl = import.meta.env.VITE_SUPABASE_URL;
+const envKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 let supabaseInstance: SupabaseClient;
 
