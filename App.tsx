@@ -156,6 +156,24 @@ const AuthModal: React.FC<{
               {type === 'login' ? "Don't have an account? Sign up" : "Already have an account? Log in"}
             </button>
           </p>
+          {/* Google Login Button */}
+<div className="relative my-6">
+  <div className="absolute inset-0 flex items-center">
+    <span className="w-full border-t border-white/10"></span>
+  </div>
+  <div className="relative flex justify-center text-xs uppercase">
+    <span className={`${isDark ? 'bg-[#12151B]' : 'bg-white'} px-2 text-zinc-500`}>Or continue with</span>
+  </div>
+</div>
+
+<button 
+  type="button"
+  onClick={() => supabase.auth.signInWithOAuth({ provider: 'google' })}
+  className="w-full py-3 px-4 border border-white/10 rounded-xl flex items-center justify-center gap-3 hover:bg-white/5 transition-all font-medium"
+>
+  <img src="https://www.google.com/favicon.ico" className="w-4 h-4" alt="Google" />
+  <span className={isDark ? 'text-white' : 'text-slate-900'}>Sign in with Google</span>
+</button>
         </div>
       </div>
     </div>
@@ -817,7 +835,13 @@ const App: React.FC = () => {
 
               <div className="pt-4">
                 <button 
-                  onClick={() => handleGenerate()} 
+                  onClick={() => {
+  if (!user) {
+    setAuthModal({ isOpen: true, type: 'signup' });
+  } else {
+    handleGenerate();
+  }
+}}
                   disabled={state.loading} 
                   className={`w-full py-6 font-outfit font-bold rounded-2xl transition-all shadow-xl disabled:opacity-50 flex items-center justify-center gap-3 active:scale-[0.98] ${isDark ? 'bg-white text-black hover:bg-slate-100' : 'bg-black text-white hover:bg-zinc-900'}`}
                 >
