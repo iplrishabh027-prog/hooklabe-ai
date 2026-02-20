@@ -942,12 +942,48 @@ onClick={async () => {
                           })}
                         </ul>
                       </div>
-                      <button 
-                        onClick={() => setState(prev => ({ ...prev, plan: planKey }))}
-                        className={`mt-10 w-full py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${isActive ? (isDark ? 'bg-[#00E5FF] text-black' : 'bg-black text-white shadow-lg') : (isDark ? 'bg-white/5 text-white hover:bg-white/10' : 'bg-slate-100 text-slate-600 hover:bg-slate-200')}`}
-                      >
-                        {planKey === 'Free' ? 'Current Plan' : isActive ? 'Active' : `Upgrade to ${planKey}`}
-                      </button>
+                      onClick={() => {
+  // 1. Agar user login nahi hai toh modal kholo
+  if (!user) {
+    setAuthModal({ isOpen: true, type: 'signup' });
+    return;
+  }
+
+  // 2. Agar Free plan hai toh kuch mat karo (already current plan hai)
+  if (planKey === 'Free') return;
+
+  // 3. Razorpay Options
+  const options = {
+    key: "rzp_live_SITye3XApPTeQd", // <-- Yahan apni Key ID dalo
+    amount: p.price * 100, // Amount in paise
+    currency: "INR",
+    name: "HookLabe AI",
+    description: `${planKey} Plan Upgrade`,
+    handler: async function (response: any) {
+      // Payment success hone par credits update karein
+      const { error } = await supabase
+        .from('credits')
+        .update({ 
+          available_credits: planKey === 'Starter' ? 300 : 1000, 
+          plan_type: planKey.toLowerCase() 
+        })
+        .eq('id', user.id);
+
+      if (!error) {
+        alert(`Mubarak ho! ${planKey} plan active ho gaya.`);
+        window.location.reload(); 
+      }
+    },
+    prefill: {
+      email: user.email
+    },
+    theme: { color: "#00E5FF" }
+  };
+
+  const rzp = new (window as any).Razorpay(options);
+  rzp.open();
+}}
+
                     </div>
                   );
                 })}
