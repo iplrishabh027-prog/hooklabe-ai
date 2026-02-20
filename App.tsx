@@ -835,12 +835,32 @@ const App: React.FC = () => {
 
               <div className="pt-4">
                 <button 
-                  onClick={() => {
+onClick={async () => {
   if (!user) {
     setAuthModal({ isOpen: true, type: 'signup' });
-  } else {
-    handleGenerate();
+    return;
   }
+
+  // Supabase RPC ko call karke credits check aur use karna
+  const { data: status, error } = await supabase.rpc('check_and_use_credit', { 
+    user_uuid: user.id 
+  });
+
+  if (error) {
+    console.error("Daya, error aaya:", error);
+    return;
+  }
+
+  if (status === 'SUCCESS') {
+    handleGenerate(); // Script generation shuru
+  } else if (status === 'DAILY_LIMIT_REACHED') {
+    alert("Free Plan: Aaj ke 5 scripts khatam! Kal aana ya upgrade karo.");
+  } else if (status === 'NO_CREDITS') {
+    alert("Bhai, Total Credits khatam! Plan khareedna padega.");
+    document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
+  }
+}}
+
 }}
                   disabled={state.loading} 
                   className={`w-full py-6 font-outfit font-bold rounded-2xl transition-all shadow-xl disabled:opacity-50 flex items-center justify-center gap-3 active:scale-[0.98] ${isDark ? 'bg-white text-black hover:bg-slate-100' : 'bg-black text-white hover:bg-zinc-900'}`}
