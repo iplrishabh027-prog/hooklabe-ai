@@ -858,13 +858,17 @@ onClick={async () => {
   } else if (status === 'NO_CREDITS') {
     alert("Bhai, Total Credits khatam! Plan khareedna padega.");
     document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
-  }
-}}
+      }
+    });
 
-}}
-                  disabled={state.loading} 
-                  className={`w-full py-6 font-outfit font-bold rounded-2xl transition-all shadow-xl disabled:opacity-50 flex items-center justify-center gap-3 active:scale-[0.98] ${isDark ? 'bg-white text-black hover:bg-slate-100' : 'bg-black text-white hover:bg-zinc-900'}`}
-                >
+    return (
+      <button
+        disabled={state.loading}
+        className={`w-full py-6 font-outfit font-bold rounded-2xl transition-all shadow-xl disabled:opacity-50 flex items-center justify-center gap-3 active:scale-[0.98] ${isDark ? 'bg-white text-black hover:bg-slate-100' : 'bg-black text-white hover:bg-zinc-900'}`}
+      >
+
+
+
                   {state.loading ? (
                     <div className="flex items-center gap-3">
                       <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
