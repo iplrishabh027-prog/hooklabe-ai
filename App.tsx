@@ -833,57 +833,53 @@ const App: React.FC = () => {
                 <input type="range" min="1" max="10" value={state.config.count} onChange={(e) => updateConfig({ count: parseInt(e.target.value) })} className="w-full h-1 bg-white/10 rounded-lg appearance-none cursor-pointer accent-[#00E5FF]" />
               </div>
 
-              <div className="pt-4">
-                <button
-  onClick={async () => {
-    if (!user) {
-      setAuthModal({ isOpen: true, type: 'signup' });
-      return;
-    }
+                      <div className="pt-4">
+          <button
+            onClick={async () => {
+              if (!user) {
+                setAuthModal({ isOpen: true, type: 'signup' });
+                return;
+              }
 
-    const { data: status, error } = await supabase.rpc('check_and_use_credit', {
-      user_uuid: user.id
-    });
+              const { data: status, error } = await supabase.rpc('check_and_use_credit', {
+                user_uuid: user.id
+              });
 
-    if (error) {
-      console.error("Daya, error aaya:", error);
-      return;
-    }
+              if (error) {
+                console.error("Daya, error aaya:", error);
+                return;
+              }
 
-    if (status === 'SUCCESS') {
-      handleGenerate();
-    } else if (status === 'DAILY_LIMIT_REACHED') {
-      alert("Free Plan: Aaj ke 5 scripts khatam! Kal aana ya upgrade karo.");
-    } else if (status === 'NO_CREDITS') {
-      alert("Bhai, Total Credits khatam! Plan khareedna padega.");
-      document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
-    }
-  }}
->
-
-      <button
-        disabled={state.loading}
-        className={`w-full py-6 font-outfit font-bold rounded-2xl transition-all shadow-xl disabled:opacity-50 flex items-center justify-center gap-3 active:scale-[0.98] ${isDark ? 'bg-white text-black hover:bg-slate-100' : 'bg-black text-white hover:bg-zinc-900'}`}
-      >
-
-
-
-                  {state.loading ? (
-                    <div className="flex items-center gap-3">
-                      <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
-                      <span>ENGINEERING CONTENT...</span>
-                    </div>
-                  ) : (
-                    <>
-                      <span>Engineer Viral Scripts</span>
-                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
-                    </>
-                  )}
-                </button>
+              if (status === 'SUCCESS') {
+                handleGenerate();
+              } else if (status === 'DAILY_LIMIT_REACHED') {
+                alert("Free Plan: Aaj ke 5 scripts khatam! Kal aana ya upgrade karo.");
+              } else if (status === 'NO_CREDITS') {
+                alert("Bhai, Total Credits khatam! Plan khareedna padega.");
+                document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
+              }
+            }}
+            disabled={state.loading}
+            className={'w-full py-6 font-outfit font-bold rounded-2xl transition-all shadow-xl disabled:opacity-50 flex items-center justify-center gap-3 text-white bg-blue-600 hover:bg-blue-700'}
+          >
+            {state.loading ? (
+              <div className="flex items-center gap-3">
+                <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
+                <span>ENGINEERING CONTENT...</span>
               </div>
-              {state.error && <p className="text-center text-xs text-red-500 font-bold tracking-widest uppercase animate-pulse">{state.error}</p>}
-            </section>
-
+            ) : (
+              <>
+                <span>Engineer Viral Scripts</span>
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </>
+            )}
+          </button>
+        </div>
+        {state.error && <p className="text-center text-xs text-red-500 font-bold tracking-widest uppercase animate-pulse">{state.error}</p>}
+      </div>
+    </section>
             {/* Results Section */}
             <div className="space-y-12" id="results">
               {state.ideas.length > 0 && (
