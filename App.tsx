@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
 import { generateReelIdeasStream } from './services/gemini';
 import { signUp, signIn, signOut, getCurrentUser } from './services/auth';
@@ -542,7 +541,7 @@ const DisclaimerView = () => (
 type ViewType = 'home' | 'about' | 'privacy' | 'terms' | 'contact' | 'refund' | 'disclaimer';
 
 const App: React.FC = () => {
-  const [theme, setTheme] = useState<'light' | 'dark'>('dark');
+  const [theme, setTheme] = useState<'light' | 'dark'>('light'); // default to light
   const [user, setUser] = useState<User | null>(null);
   const [authModal, setAuthModal] = useState<{isOpen: boolean; type: 'login' | 'signup'}>({ isOpen: false, type: 'login' });
   const [view, setView] = useState<ViewType>('home');
@@ -578,8 +577,8 @@ const App: React.FC = () => {
   const handleGenerate = useCallback(async (forcedConfig?: GenerationConfig) => {
     const activeConfig = { ...(forcedConfig || state.config), plan: state.plan };
     
-    if (activeConfig.count > PLAN_FEATURES[state.plan].maxScripts) {
-      setState(prev => ({ ...prev, error: `Your ${state.plan} plan is limited to ${PLAN_FEATURES[state.plan].maxScripts} scripts per generation.` }));
+    if (activeConfig.count > PLAN_FEATURES[state.plan as keyof typeof PLAN_FEATURES].maxScripts) {
+      setState(prev => ({ ...prev, error: `Your ${state.plan} plan is limited to ${PLAN_FEATURES[state.plan as keyof typeof PLAN_FEATURES].maxScripts} scripts per generation.` }));
       return;
     }
 
@@ -833,53 +832,53 @@ const App: React.FC = () => {
                 <input type="range" min="1" max="10" value={state.config.count} onChange={(e) => updateConfig({ count: parseInt(e.target.value) })} className="w-full h-1 bg-white/10 rounded-lg appearance-none cursor-pointer accent-[#00E5FF]" />
               </div>
 
-                      <div className="pt-4">
-          <button
-            onClick={async () => {
-              if (!user) {
-                setAuthModal({ isOpen: true, type: 'signup' });
-                return;
-              }
+              <div className="pt-4">
+                <button
+                  onClick={async () => {
+                    if (!user) {
+                      setAuthModal({ isOpen: true, type: 'signup' });
+                      return;
+                    }
 
-              const { data: status, error } = await supabase.rpc('check_and_use_credit', {
-                user_uuid: user.id
-              });
+                    const { data: status, error } = await supabase.rpc('check_and_use_credit', {
+                      user_uuid: user.id
+                    });
 
-              if (error) {
-                console.error("Daya, error aaya:", error);
-                return;
-              }
+                    if (error) {
+                      console.error("Daya, error aaya:", error);
+                      return;
+                    }
 
-              if (status === 'SUCCESS') {
-                handleGenerate();
-              } else if (status === 'DAILY_LIMIT_REACHED') {
-                alert("Free Plan: Aaj ke 5 scripts khatam! Kal aana ya upgrade karo.");
-              } else if (status === 'NO_CREDITS') {
-                alert("Bhai, Total Credits khatam! Plan khareedna padega.");
-                document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
-              }
-            }}
-            disabled={state.loading}
-            className={'w-full py-6 font-outfit font-bold rounded-2xl transition-all shadow-xl disabled:opacity-50 flex items-center justify-center gap-3 text-white bg-blue-600 hover:bg-blue-700'}
-          >
-            {state.loading ? (
-              <div className="flex items-center gap-3">
-                <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
-                <span>ENGINEERING CONTENT...</span>
+                    if (status === 'SUCCESS') {
+                      handleGenerate();
+                    } else if (status === 'DAILY_LIMIT_REACHED') {
+                      alert("Free Plan: Aaj ke 5 scripts khatam! Kal aana ya upgrade karo.");
+                    } else if (status === 'NO_CREDITS') {
+                      alert("Bhai, Total Credits khatam! Plan khareedna padega.");
+                      document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
+                  disabled={state.loading}
+                  className={'w-full py-6 font-outfit font-bold rounded-2xl transition-all shadow-xl disabled:opacity-50 flex items-center justify-center gap-3 text-white bg-blue-600 hover:bg-blue-700'}
+                >
+                  {state.loading ? (
+                    <div className="flex items-center gap-3">
+                      <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
+                      <span>ENGINEERING CONTENT...</span>
+                    </div>
+                  ) : (
+                    <>
+                      <span>Engineer Viral Scripts</span>
+                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                    </>
+                  )}
+                </button>
               </div>
-            ) : (
-              <>
-                <span>Engineer Viral Scripts</span>
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </>
-            )}
-          </button>
-        </div>
-        {state.error && <p className="text-center text-xs text-red-500 font-bold tracking-widest uppercase animate-pulse">{state.error}</p>}
-      </div>
-    </section>
+              {state.error && <p className="text-center text-xs text-red-500 font-bold tracking-widest uppercase animate-pulse">{state.error}</p>}
+            </section>
+
             {/* Results Section */}
             <div className="space-y-12" id="results">
               {state.ideas.length > 0 && (
@@ -941,48 +940,50 @@ const App: React.FC = () => {
                           })}
                         </ul>
                       </div>
-                      onClick={() => {
-  // 1. Agar user login nahi hai toh modal kholo
-  if (!user) {
-    setAuthModal({ isOpen: true, type: 'signup' });
-    return;
-  }
+                      <button
+                        onClick={() => {
+                          if (!user) {
+                            setAuthModal({ isOpen: true, type: 'signup' });
+                            return;
+                          }
+                          if (planKey === 'Free') return;
 
-  // 2. Agar Free plan hai toh kuch mat karo (already current plan hai)
-  if (planKey === 'Free') return;
+                          const options = {
+                            key: "rzp_live_SITye3XApPTeQd", 
+                            amount: parseInt(p.price.replace('₹', '')) * 100, 
+                            currency: "INR",
+                            name: "HookLabe AI",
+                            description: `${planKey} Plan Upgrade`,
+                            handler: async function (response: any) {
+                              const { error } = await supabase
+                                .from('credits')
+                                .update({ 
+                                  available_credits: planKey === 'Starter' ? 300 : 1000, 
+                                  plan_type: planKey.toLowerCase() 
+                                })
+                                .eq('id', user.id);
 
-  // 3. Razorpay Options
-  const options = {
-    key: "rzp_live_SITye3XApPTeQd", // <-- Yahan apni Key ID dalo
-    amount: p.price * 100, // Amount in paise
-    currency: "INR",
-    name: "HookLabe AI",
-    description: `${planKey} Plan Upgrade`,
-    handler: async function (response: any) {
-      // Payment success hone par credits update karein
-      const { error } = await supabase
-        .from('credits')
-        .update({ 
-          available_credits: planKey === 'Starter' ? 300 : 1000, 
-          plan_type: planKey.toLowerCase() 
-        })
-        .eq('id', user.id);
-
-      if (!error) {
-        alert(`Mubarak ho! ${planKey} plan active ho gaya.`);
-        window.location.reload(); 
-      }
-    },
-    prefill: {
-      email: user.email
-    },
-    theme: { color: "#00E5FF" }
-  };
-
-  const rzp = new (window as any).Razorpay(options);
-  rzp.open();
-}}
-
+                              if (!error) {
+                                alert(`Mubarak ho! ${planKey} plan active ho gaya.`);
+                                window.location.reload(); 
+                              }
+                            },
+                            prefill: {
+                              email: user.email
+                            },
+                            theme: { color: "#00E5FF" }
+                          };
+                          const rzp = new (window as any).Razorpay(options);
+                          rzp.open();
+                        }}
+                        className={`w-full py-3.5 mt-6 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all ${
+                          isActive
+                            ? isDark ? 'bg-white/10 text-white cursor-default' : 'bg-black/5 text-black cursor-default'
+                            : isDark ? 'bg-white text-black hover:bg-slate-200' : 'bg-black text-white hover:bg-zinc-800'
+                        }`}
+                      >
+                        {isActive ? 'Current Plan' : `Get ${planKey}`}
+                      </button>
                     </div>
                   );
                 })}
