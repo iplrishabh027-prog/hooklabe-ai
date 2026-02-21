@@ -860,7 +860,7 @@ onClick={async () => {
     document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
     }
   }
-
+}
   return (
 
 
