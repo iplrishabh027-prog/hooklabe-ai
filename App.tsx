@@ -834,35 +834,32 @@ const App: React.FC = () => {
               </div>
 
               <div className="pt-4">
-                <button 
-onClick={async () => {
-  if (!user) {
-    setAuthModal({ isOpen: true, type: 'signup' });
-    return;
-  }
-
-  // Supabase RPC ko call karke credits check aur use karna
-  const { data: status, error } = await supabase.rpc('check_and_use_credit', { 
-    user_uuid: user.id 
-  });
-
-  if (error) {
-    console.error("Daya, error aaya:", error);
-    return;
-  }
-
-  if (status === 'SUCCESS') {
-    handleGenerate(); // Script generation shuru
-  } else if (status === 'DAILY_LIMIT_REACHED') {
-    alert("Free Plan: Aaj ke 5 scripts khatam! Kal aana ya upgrade karo.");
-  } else if (status === 'NO_CREDITS') {
-    alert("Bhai, Total Credits khatam! Plan khareedna padega.");
-    document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
+                <button
+  onClick={async () => {
+    if (!user) {
+      setAuthModal({ isOpen: true, type: 'signup' });
+      return;
     }
-  }
-}
-  return (
 
+    const { data: status, error } = await supabase.rpc('check_and_use_credit', {
+      user_uuid: user.id
+    });
+
+    if (error) {
+      console.error("Daya, error aaya:", error);
+      return;
+    }
+
+    if (status === 'SUCCESS') {
+      handleGenerate();
+    } else if (status === 'DAILY_LIMIT_REACHED') {
+      alert("Free Plan: Aaj ke 5 scripts khatam! Kal aana ya upgrade karo.");
+    } else if (status === 'NO_CREDITS') {
+      alert("Bhai, Total Credits khatam! Plan khareedna padega.");
+      document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }}
+>
 
       <button
         disabled={state.loading}
