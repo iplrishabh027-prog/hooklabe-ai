@@ -859,7 +859,7 @@ onClick={async () => {
     alert("Bhai, Total Credits khatam! Plan khareedna padega.");
     document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
     }
-  })
+  }
 
   return (
 
