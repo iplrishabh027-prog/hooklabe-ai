@@ -40,7 +40,7 @@ export default function MainGenerator() {
     const creditReward = plan === 'starter' ? 500 : 1200;
 
     const options = {
-      key: "YOUR_RAZORPAY_KEY_ID", // Yahan apni Razorpay Key daalna
+      key: "rzp_live_SITye3XApPTeQd", // Yahan apni Razorpay Key daalna
       amount: amount,
       currency: "INR",
       name: "Hooklabe AI",
